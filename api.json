@@ -1,0 +1,180 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mobile app API",
+        "contact": {
+            "name": "FE team"
+        },
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/wishlist": {
+            "get": {
+                "summary": "Get users wishlist items",
+                "description": "Get wishlist of current user",
+                "operationId": "getWishlist",
+                "responses": {
+                    "200": {
+                        "description": "List of items stored in users wishlist",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/WishlistItem"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete everything from wishlist",
+                "operationId": "deleteWishlist",
+                "responses": {
+                    "204": {
+                        "description": "Wishlist successfully removed"
+                    },
+                    "500": {
+                        "description": "Internal error while processing entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/wishlist/item/{dealId}": {
+            "post": {
+                "summary": "Add item to users wishlist",
+                "operationId": "addItemToWishlist",
+                "parameters": [
+                    {
+                        "name": "dealId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Item successfully added"
+                    },
+                    "400": {
+                        "description": "Invalid dealId attr"
+                    },
+                    "401": {
+                        "description": "User not logged in"
+                    },
+                    "404": {
+                        "description": "Deal does not exist"
+                    },
+                    "500": {
+                        "description": "Internal error while processing entity"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete item from wishlist",
+                "operationId": "deleteWishlistItem",
+                "parameters": [
+                    {
+                        "name": "dealId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "the item was successfully removed"
+                    },
+                    "400": {
+                        "description": "Invalid dealId attr"
+                    },
+                    "401": {
+                        "description": "User not logged in"
+                    },
+                    "404": {
+                        "description": "Deal does not exist"
+                    },
+                    "500": {
+                        "description": "Internal error while processing entity"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApiError": {
+                "title": "Api error",
+                "properties": {
+                    "code": {
+                        "description": "API status code",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "API status message",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "WishlistItem": {
+                "title": "Wishlist item",
+                "description": "Wishlist item  schema",
+                "properties": {
+                    "dealId": {
+                        "description": "Deal Id",
+                        "type": "integer"
+                    },
+                    "actualPrice": {
+                        "description": "Price for which this deal can be bought",
+                        "type": "number"
+                    },
+                    "beforePrice": {
+                        "description": "Price before sale",
+                        "type": "number"
+                    },
+                    "extraPrice": {
+                        "description": "Extra price (with usage of global sale code f.e.)",
+                        "type": "number"
+                    },
+                    "title": {
+                        "description": "Deal title",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Deal description",
+                        "type": "string"
+                    },
+                    "brandName": {
+                        "description": "Deal's brand name",
+                        "type": "string"
+                    },
+                    "picture": {
+                        "description": "Main picture object"
+                    },
+                    "link": {
+                        "description": "Link to the deal's detail",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
